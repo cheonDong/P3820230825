@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputActionValue.h"
 #include "MyPawn.generated.h"
 
 class UBoxComponent;
@@ -74,4 +75,41 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMyActorComponent* MyActorComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float PropellerSpeed = 3600;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float BoostValue = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 Gold = 100;
+	//int형은 컴파일러에 따라 사이즈가 다르므로 int형의 사이즈도 제대로 정해주어야 한다.
+
+	void Pitch(float value);
+
+	void Roll(float Value);
+
+	void Fire();
+
+	void Boost();
+
+	void UnBoost();
+
+	void EnhancedBoost(const FInputActionValue& Value);
+
+	void EnhancedUnBoost(const FInputActionValue& Value);
+
+	void EnhancedFire(const FInputActionValue& Value);
+
+	void EnhancedPitchAndRoll(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_Boost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_Fire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_PitchAndRoll;
 };

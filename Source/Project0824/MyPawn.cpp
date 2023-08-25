@@ -9,6 +9,10 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "MyActorComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
 
 
 // Sets default values 원본 메모리에 세팅
@@ -81,6 +85,7 @@ void AMyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	AddMovementInput(GetActorForwardVector(), BoostValue);
 }
 
 // Called to bind functionality to input
@@ -88,5 +93,74 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (EnhancedInputComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("aaaa"));
+		EnhancedInputComponent->BindAction(IA_Boost, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedBoost);
+		EnhancedInputComponent->BindAction(IA_Boost, ETriggerEvent::Completed, this, &AMyPawn::EnhancedUnBoost);
+		EnhancedInputComponent->BindAction(IA_Fire, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedFire);
+		EnhancedInputComponent->BindAction(IA_PitchAndRoll, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedPitchAndRoll);
+	}
+	else
+	{
+		// 예전 입력 방식. 이제는 언리얼 에디터의 에셋을 사용하여 입력 방식 생성
+		/*PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
+		PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
+
+		PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AMyPawn::Fire);
+		PlayerInputComponent->BindAction(TEXT("Boost"), IE_Pressed, this, &AMyPawn::Boost);
+		PlayerInputComponent->BindAction(TEXT("Boost"), IE_Released, this, &AMyPawn::UnBoost);*/
+	}
+
+}
+
+void AMyPawn::Pitch(float value)
+{
+	AddActorLocalRotation(FRotator(value * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()) * 60.0f,
+		0,
+		0));
+}
+
+void AMyPawn::Roll(float value)
+{
+	float DeltaSeconds = UGameplayStatics::GetWorldDeltaSeconds(GetWorld());
+	AddActorLocalRotation(FRotator(0, 0, value * DeltaSeconds * 60.0f));
+}
+
+void AMyPawn::Fire()
+{
+	// GetWorld()->SpawnActor<>();
+}
+
+void AMyPawn::Boost()
+{
+
+}
+
+void AMyPawn::UnBoost()
+{
+}
+
+void AMyPawn::EnhancedBoost(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("EnhancedBoost"));
+
+	BoostValue = 1.0f;
+}
+
+void AMyPawn::EnhancedUnBoost(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("EnhancedUnBoost"));
+
+	BoostValue = 0.5f;
+}
+
+void AMyPawn::EnhancedFire(const FInputActionValue& Value)
+{
+}
+
+void AMyPawn::EnhancedPitchAndRoll(const FInputActionValue& Value)
+{
 }
 
