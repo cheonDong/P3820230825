@@ -36,6 +36,42 @@ public:
 
 	// 어딘가에 있는 BoxComponent를 사용하는 것이므로 메모리에 접근하여 사용.
 	// 그래서 모두 포인터로 사용.
-	// UBoxComponent* 
+	
+	// instanceonly = 레벨에 배치한 것만 가능
+	// 컴포넌트들은 모두 VisibleAnywhere
+	// VisibleAnywhere = BP의 디테일 탭에 표시됨. 값의 변경은 불가능
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UBoxComponent* Box;
 
+	// BlueprintReadOnly = get으로 값을 가져오는것만 가능
+	// BlueprintReadWrite = get, set 모두 가능
+	// EditAnywhere = 컴포넌트 값을 BP에서 변경할 수 있음.
+	// Category = "Component" 는 상속된 변수 표시 할때 생성한 변수들을 한 카테고리로 묶을때 사용.
+	// ** 상속된 변수 표시하는 방법 = 해당 클래스의 BP에 들어가보면 내 블루프린트 탭의 톱니바퀴 모양 클릭. 
+	// 이 후, 맨 위의 상속된 변수 생성을 클릭하면 C++에서 작업한 변수들을 모두 확인할 수 있다. **
+	// Meta = C++ 에서 private, protected로 접근할 수 없는 변수나 함수를 블루프린트에서 접근할 수 있도록 함.
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UStaticMeshComponent* Body;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UStaticMeshComponent* Left;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UStaticMeshComponent* Right;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UArrowComponent* Arrow;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UFloatingPawnMovement* Movement;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	UMyActorComponent* MyActorComponent;
 };
